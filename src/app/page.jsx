@@ -6,22 +6,24 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Camera } from "react-camera-pro";
 import { BsImageFill } from "react-icons/bs";
 
+
 const Home = () => {
-  const [processing, setProcessing] = useState<boolean>(false);
-  const camera = useRef(null);
+  const [processing, setProcessing] = useState(false);
+  const initialRef = null;
+  const camera = useRef(initialRef);
   const [image, setImage] = useState(null);
-  const [texts, setTexts] = useState<Array<string>>([]);
-  const imageInputRef: any = useRef(null);
+  const [texts, setTexts] = useState([]);
+  const imageInputRef = useRef(null);
   const openBrowseImage = async () => {
     await imageInputRef.current.click();
   };
 
-  const convert = async (url: string) => {
+  const convert = async (url) => {
     if (url.length) {
       setProcessing(true);
-      await convertor(url).then((txt: string) => {
+      await convertor(url).then((txt) => {
         console.log({txt})
-        let copyTexts: Array<string> = [];
+        let copyTexts = [];
         copyTexts.push(txt);
         setTexts(copyTexts);
       });
@@ -53,7 +55,9 @@ const Home = () => {
       <button 
       className="bg-white px-5 py-2 text-black rounded-md font-[800] text-sm md:text-base flex items-center md:gap-1"
           onClick={() => {
-            setImage(camera.current.takePhoto());
+            if (camera.current !== null) {
+              setImage(camera.current.takePhoto());
+            }
           }}
         >Take photo</button>
 
